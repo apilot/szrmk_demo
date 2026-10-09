@@ -7,30 +7,32 @@
 <meta name="description" content="Демо-макет первого экрана: резервуары РВС 10–5000 м³ и РГС 3–200 м³ по ГОСТ 31385-2023, изотермические резервуары, металлоконструкции по чертежам. Прайс и наличие — в течение рабочего дня.">
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex, nofollow">
-<!-- тема: СВЕТЛАЯ по умолчанию (ДНК rmk.ru: белые фоны, синий #0B6BB3, Open Sans, радиус 4px);
-     выбор — localStorage «szrmk-theme» (приоритет); #dark в URL — старт в тёмной, только если выбора ещё нет;
+<!-- тема: СВЕТЛАЯ по умолчанию; выбор — localStorage «szrmk-theme» (приоритет);
+     #dark в URL — старт в тёмной, только если выбора ещё нет;
      класс .dark на <html> ставится до отрисовки — без вспышки -->
 <script>try{var t=localStorage.getItem('szrmk-theme');if(!t&&location.hash==='#dark')t='dark';if(t==='dark')document.documentElement.classList.add('dark')}catch(e){if(location.hash==='#dark')document.documentElement.classList.add('dark')}</script>
 <!--
-  v1_hero_light — редизайн «в том же ключе» (решение владельца 09.10): сайт rmk.ru светлый не случайно,
-  берём его ДНК и наводим порядок. Скин из их template CSS (curl 09.10, Aspro Allcorp3Metal):
-  · токены темы: --theme-base-color #0B6BB3 (hue 206/88%/37%), hover-сдвиг −6% lightness → #085A9C,
-    --theme-border-radius 4px (фоны/карточки/кнопки), opacity-тинт #0B6BB31A;
-  · фоны #FFFFFF, серые подложки #F2F2F2/#F5F5F5/#F8F8F8/#FAFAFA, текст #333, вторичный #666,
-    бордеры #E5E5E5/#DDD, верхняя кромка body 2px solid #DDD;
-  · кнопки: заливка синим + белый текст (.btn-default) и белые с синим текстом (.btn-white);
-  · шрифт: Open Sans (заголовки и текст; Oswald в их CSS перебит inherit), line-height 1.1–1.43;
-  · первый экран у них: H1 «Производство резервуаров и металлоконструкций любой сложности»,
-    тег «ТОЧНО И В СРОК», слайдер, шапка с пачкой телефонов +7 (8452) 63-…-….
-  Что сделано грамотнее: один месседж на блок, телефон+CTA заметнее, карточка РВС-1000 с конкретикой
-  (тезис v1 — сохранён), отступы 48px+, display крупнее, hover 200–300ms, мягкая глубина карточек,
-  чек-лист: контраст ≥4.5:1 в обеих темах (включая мелкие), focus-visible, Lucide SVG вместо точек/эмодзи,
-  prefers-reduced-motion, брейкпоинты 375/768/1024/1440.
-  Контент-блоки/тексты/реквизиты/маркировки — без изменений (проверены zai-ревью 08.10, v1_hero.html).
-  2 темы: light (по умолчанию) + dark (база — палитра проверенного тёмного v1) — переключатель sun/moon
-  в шапке, darkMode:'class', localStorage «szrmk-theme», deep-link #dark, pre-render без вспышки.
+  v1_hero_light — редизайн v2 на дизайн-языке shadcn/ui (решение владельца 09.10: прошлый вариант
+  «получился как у techservice» → нужен ДРУГОЙ, узнаваемо shadcn).
+  Канонические токены shadcn (HSL CSS-переменные, база zinc):
+  · светлая: background 0 0% 100%, foreground 240 10% 3.9%, muted 240 4.8% 95.9%, border 240 5.9% 90%;
+  · тёмная: background 240 10% 3.9%, card 240 10% 5.9%, muted/border 240 3.7% 15.9%;
+  · --primary = фирменный синий клиента #0b6bb3 (206 92% 37%, белый текст) — ЕДИНСТВЕННЫЙ цветовой
+    акцент, всё остальное нейтральный zinc; в тёмной primary светлее: 199 89% 62%, текст тёмный;
+  · --radius 0.5rem; типографика Inter (Google Fonts), табулярные цифры (tnum) для артикулов/цен.
+  Компонентная эстетика shadcn: кнопки default/outline/ghost, Badge secondary (pill, muted-фон)
+  и outline (чипы подбора), Card = border + radius + bg-card БЕЗ тяжёлых теней (flat-elegant),
+  inputs с ring-focus (ring 2px + ring-offset), разделители border, щедрые отступы, calm look.
+  Анти-повтор techservice: без оранжевого/черчения/blueprint-сеток, без «Спецпредложение дня».
+  Контент-блоки/тексты/реквизиты/маркировки — 1:1 (проверены zai-ревью 08.10, v1_hero.html);
+  сохранены типографские фиксы ревью (nbsp перед тире и перед «·», диапазоны «РВС 10–5000 м³»).
+  2 темы: light (дефолт) + dark, переключатель sun/moon (Lucide inline SVG, aria-pressed),
+  darkMode:'class', localStorage «szrmk-theme», deep-link #dark (приоритет localStorage).
   Демо: форма onsubmit=false, данные не отправляет. НЕ ПУБЛИКАЦИЯ.
 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -38,396 +40,464 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        /* токены через CSS-переменные: :root — светлая ДНК rmk.ru, .dark — проверенная тёмная палитра v1 */
-        paper:    'rgb(var(--c-paper) / <alpha-value>)',
-        paper2:   'rgb(var(--c-paper2) / <alpha-value>)',
-        ink:      'rgb(var(--c-ink) / <alpha-value>)',
-        ink2:     'rgb(var(--c-ink2) / <alpha-value>)',
-        gray:     'rgb(var(--c-gray) / <alpha-value>)',
-        line:     'rgb(var(--c-line) / <alpha-value>)',
-        blue:     'rgb(var(--c-blue) / <alpha-value>)',
-        bluedeep: 'rgb(var(--c-bluedeep) / <alpha-value>)',
-        btn:      'rgb(var(--c-btn) / <alpha-value>)',
-        btndeep:  'rgb(var(--c-btnhover) / <alpha-value>)',
-        ok:       'rgb(var(--c-ok) / <alpha-value>)',
-        oktint:   'rgb(var(--c-oktint) / <alpha-value>)',
-        amber:    'rgb(var(--c-amber) / <alpha-value>)',
-        ambertint:'rgb(var(--c-ambertint) / <alpha-value>)',
-        inputbg:  'rgb(var(--c-input) / <alpha-value>)',
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+        secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+        muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+        accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+        card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' }
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+        xl: 'calc(var(--radius) + 4px)'
       },
       fontFamily: {
-        disp: ['"Open Sans"', 'sans-serif'],   /* родной шрифт rmk.ru */
-        body: ['"Open Sans"', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
-      },
-    },
-  },
-};
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace']
+      }
+    }
+  }
+}
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  html { scroll-behavior: smooth; }
-  body { text-rendering: optimizeLegibility; }
-  section[id], aside[id], footer[id], div[id] { scroll-margin-top: 84px; }
-
-  /* ===== ТЕМЫ: светлая = ДНК rmk.ru, тёмная = проверенная палитра v1 ===== */
-  :root{
+  /* ===== shadcn/ui tokens: zinc base + фирменный синий #0b6bb3 как primary ===== */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 206 92% 37%;            /* #0b6bb3 — фирменный синий клиента */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 206 92% 37%;
+    --radius: 0.5rem;
     color-scheme: light;
-    --c-paper:255 255 255;     /* #FFFFFF их body */
-    --c-paper2:244 246 248;    /* #F4F6F8 — их серые подложки #f2f2f2/#f8f8f8 */
-    --c-ink:51 51 51;          /* #333 их основной текст */
-    --c-ink2:85 85 85;         /* #555 лид-текст — 7.5:1 на белом */
-    --c-gray:102 102 102;      /* #666 их вторичный — 5.7:1 на белом */
-    --c-line:229 229 229;      /* #E5E5E5 их бордеры */
-    --c-blue:11 107 179;       /* #0B6BB3 их --theme-base-color — 5.4:1 на белом */
-    --c-bluedeep:8 90 156;     /* #085A9C их hover −6% lightness — 7:1 на белом */
-    --c-btn:11 107 179;        /* CTA-заливка фирменная в обеих темах */
-    --c-btnhover:8 90 156;
-    --c-ok:27 116 66;          /* #1B7442 текст статуса на тинте — 5.1:1 */
-    --c-oktint:232 244 236;    /* #E8F4EC подложка статуса */
-    --c-amber:133 90 0;        /* #855A00 текст «ПОД ЗАКАЗ» на тинте — 5.1:1 */
-    --c-ambertint:255 244 214; /* #FFF4D6 */
-    --c-input:244 246 248;     /* поля формы */
   }
-  .dark{
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 5.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 199 89% 62%;            /* светлый синий #4cb3f4-ish */
+    --primary-foreground: 240 10% 3.9%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 199 89% 62%;
     color-scheme: dark;
-    --c-paper:16 20 24;        /* #101418 фон страницы (палитра v1) */
-    --c-paper2:23 29 36;       /* #171D24 секции/вдавленные блоки */
-    --c-ink:233 237 242;       /* #E9EDF2 основной текст — 15:1 */
-    --c-ink2:196 205 218;      /* #C4CDDA вторичный — 10:1 */
-    --c-gray:152 165 179;      /* #98A5B3 мелкие подписи — 6.4:1 */
-    --c-line:43 52 64;         /* #2B3440 бордеры */
-    --c-blue:111 182 239;      /* #6FB6EF ссылки/иконки — 8:1 */
-    --c-bluedeep:140 200 242;  /* #8CC8F2 крупный синий текст — 10:1 */
-    --c-btn:11 107 179;        /* CTA-заливка та же, белый текст 5.4:1 */
-    --c-btnhover:8 90 156;
-    --c-ok:127 233 172;        /* #7FE9AC */
-    --c-oktint:18 41 29;       /* #12291D */
-    --c-amber:255 194 75;      /* #FFC24B */
-    --c-ambertint:46 36 16;    /* #2E2410 */
-    --c-input:31 38 48;        /* #1F2630 */
-  }
-  ::selection { background: #0B6BB3; color: #FFFFFF; }
-  .dark ::selection { background: #8CC8F2; color: #101418; }
-
-  /* видимый фокус для клавиатурной навигации — в обеих темах */
-  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-    outline: 2.5px solid #0B6BB3; outline-offset: 2px;
-  }
-  .dark a:focus-visible, .dark button:focus-visible, .dark input:focus-visible, .dark textarea:focus-visible {
-    outline-color: #8CC8F2;
   }
 
-  /* инженерная сетка «чертёж»: светлая — сине-серая, тёмная — frost (0 байт медиа, вместо видео 17,4 MB) */
-  .blueprint {
-    background-image:
-      linear-gradient(rgba(11,107,179,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(11,107,179,0.05) 1px, transparent 1px),
-      linear-gradient(rgba(11,107,179,0.09) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(11,107,179,0.09) 1px, transparent 1px);
+  html { scroll-behavior: smooth; }
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  .dark .blueprint {
-    background-image:
-      linear-gradient(rgba(233,237,242,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(233,237,242,0.035) 1px, transparent 1px),
-      linear-gradient(rgba(233,237,242,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(233,237,242,0.06) 1px, transparent 1px);
+  section { scroll-margin-top: 5rem; }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  /* ===== Button (shadcn variants) ===== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    white-space: nowrap; border-radius: calc(var(--radius) - 2px);
+    font-size: .875rem; font-weight: 500; line-height: 1;
+    height: 2.25rem; padding: 0 1rem;
+    cursor: pointer; user-select: none; text-decoration: none;
+    transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+  }
+  .btn:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+  .btn-default { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+  .btn-default:hover { background: hsl(var(--primary) / .9); }
+  .btn-outline { border: 1px solid hsl(var(--input)); background: hsl(var(--background)); color: hsl(var(--foreground)); }
+  .btn-outline:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); }
+  .btn-ghost { background: transparent; color: hsl(var(--foreground)); }
+  .btn-ghost:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); }
+  .btn-lg { height: 2.5rem; padding: 0 2rem; font-size: .9375rem; }
+  .btn-icon { height: 2.25rem; width: 2.25rem; padding: 0; }
+  .btn-block { width: 100%; }
+
+  /* ===== Badge (shadcn secondary / outline) ===== */
+  .badge {
+    display: inline-flex; align-items: center; gap: .375rem;
+    border-radius: 9999px; padding: .125rem .625rem;
+    font-size: .75rem; font-weight: 600; line-height: 1.4; white-space: nowrap;
+  }
+  .badge-secondary { background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); }
+  .badge-outline { border: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); background: transparent; }
+
+  /* ===== Card (shadcn: border + radius + bg-card, flat) ===== */
+  .card {
+    border-radius: calc(var(--radius) + 4px);
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
   }
 
-  /* мягкая глубина карточек: светлая — лёгкая, тёмная — как в проверенном v1; hover — lift 200ms без layout-shift */
-  .card-shadow { box-shadow: 0 8px 30px rgba(16,24,36,0.10); }
-  .dark .card-shadow { box-shadow: 0 8px 30px rgba(0,0,0,0.45); }
-  .card-lift { transition: transform .2s ease, box-shadow .2s ease; }
-  .card-lift:hover { transform: translateY(-2px); }
+  /* ===== Input / Label / Textarea (ring-focus: ring 2px + ring-offset) ===== */
+  .label { display: block; font-size: .875rem; font-weight: 500; color: hsl(var(--foreground)); }
+  .field {
+    display: flex; width: 100%; border-radius: calc(var(--radius) - 2px);
+    border: 1px solid hsl(var(--input)); background: transparent;
+    padding: .5rem .75rem; font-size: .875rem; color: hsl(var(--foreground));
+    font-family: inherit; line-height: 1.5;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .field::placeholder { color: hsl(var(--muted-foreground)); }
+  .field:focus-visible {
+    outline: none;
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+  }
+  textarea.field { min-height: 6rem; resize: vertical; }
 
-  .pulse { animation: pulse 1.8s ease-in-out infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-  .balance { text-wrap: balance; }
+  /* ===== Nav link (ghost) ===== */
+  .navlink {
+    font-size: .875rem; font-weight: 500; color: hsl(var(--muted-foreground));
+    text-decoration: none; padding: .375rem .625rem; border-radius: calc(var(--radius) - 2px);
+    transition: color .15s ease, background-color .15s ease;
+  }
+  .navlink:hover { color: hsl(var(--foreground)); background: hsl(var(--accent)); }
+  .navlink:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
 
-  /* крестик вместо бургера в открытом меню — переключение по aria-expanded (ID-специфичность перебивает .hidden/.flex) */
-  #menuBtn[aria-expanded="true"] .icon-burger { display: none; }
-  #menuBtn[aria-expanded="true"] .icon-x { display: block; }
+  a:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; border-radius: 4px; }
+
+  /* ===== Theme toggle icons: sun виден в светлой, moon — в тёмной ===== */
+  .icon-sun { display: none; }
+  .icon-moon { display: block; }
+  .dark .icon-sun { display: block; }
+  .dark .icon-moon { display: none; }
+
+  /* ===== Burger → крестик (по aria-expanded) ===== */
+  #menu-toggle .icon-x { display: none; }
+  #menu-toggle[aria-expanded="true"] .icon-burger { display: none; }
+  #menu-toggle[aria-expanded="true"] .icon-x { display: block; }
+
+  /* ===== Skip link ===== */
+  .skip {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--border)); border-top: 0;
+    padding: .5rem 1rem; font-size: .875rem; border-radius: 0 0 var(--radius) 0;
+  }
+  .skip:focus { left: 0; }
+
   @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
-    *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   }
 </style>
 </head>
-<body class="bg-paper text-ink font-body antialiased">
-<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-btn focus:text-white focus:px-4 focus:py-2 focus:rounded font-semibold">К содержанию</a>
+<body>
+<a class="skip" href="#main">К содержанию</a>
 
-<!-- затемнение под открытым мобильным меню: контент не читается насквозь, клик закрывает -->
-<div id="menuScrim" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" aria-hidden="true"></div>
-
-<!-- ШАПКА: телефон КРУПНО в первом экране (тезис v1) + CTA + переключатель темы.
-     Формат СТРОГО валидный: +7 (8452) 35-31-37 → tel:+78452353137 (11 цифр).
-     У rmk.ru в шапке пачка департаментских телефонов и ни одного крупного — здесь один заметный. -->
-<header class="sticky top-0 z-50 bg-paper/95 backdrop-blur border-b border-line">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-[56px] lg:h-[72px] gap-3 lg:gap-6">
-      <!-- логотип (текстовый, без бинарных ассетов) -->
-      <a href="#main" class="flex items-center gap-2.5 shrink-0 min-w-0" aria-label="СЗ РМК — на главную">
-        <span class="flex items-center justify-center w-9 h-9 rounded bg-btn text-white font-mono font-bold text-[14px] shrink-0" aria-hidden="true">РМК</span>
-        <span class="min-w-0">
-          <span class="block font-disp font-extrabold tracking-tight text-[16px] lg:text-[17px] leading-none">СЗ&nbsp;РМК</span>
-          <span class="hidden sm:block mt-0.5 text-[11px] text-gray leading-none">резервуары и металлоконструкции</span>
+<!-- ===================== ШАПКА (sticky, border-b, backdrop-blur) ===================== -->
+<header class="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between gap-3">
+      <!-- лого -->
+      <a href="#main" class="flex items-center gap-2.5" aria-label="СЗ РМК — на главную">
+        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary text-[11px] font-bold tracking-tight text-primary-foreground">РМК</span>
+        <span class="leading-tight">
+          <span class="block text-[15px] font-semibold tracking-tight">СЗ РМК</span>
+          <span class="hidden sm:block text-[11px] text-muted-foreground">резервуары и металлоконструкции</span>
         </span>
       </a>
-      <!-- десктоп-навигация -->
-      <nav class="hidden lg:flex items-center gap-7 text-[14.5px] font-semibold" aria-label="Основное меню">
-        <a href="#spec" class="hover:text-blue transition-colors duration-200">Продукция</a>
-        <a href="#podbor" class="hover:text-blue transition-colors duration-200">Подбор</a>
-        <a href="#rfq" class="hover:text-blue transition-colors duration-200">Прайс</a>
-        <a href="#contacts" class="hover:text-blue transition-colors duration-200">Контакты</a>
+
+      <!-- навигация (lg+) -->
+      <nav class="hidden lg:flex items-center gap-1" aria-label="Основная навигация">
+        <a class="navlink" href="#produkciya">Продукция</a>
+        <a class="navlink" href="#podbor">Подбор</a>
+        <a class="navlink" href="#rfq">Прайс</a>
+        <a class="navlink" href="#contacts">Контакты</a>
       </nav>
-      <!-- телефон крупно + CTA -->
-      <div class="flex items-center gap-2 lg:gap-5">
-        <a href="tel:+78452353137" class="text-right leading-none group whitespace-nowrap" spellcheck="false">
-          <span class="block font-mono font-bold text-[13.5px] sm:text-[17px] lg:text-[20px] tracking-tight group-hover:text-blue transition-colors duration-200">+7 (8452) 35-31-37</span>
-          <span class="hidden lg:block mt-1 text-[11px] text-gray">прайс и заявки · пн–пт 8:00–17:00</span>
+
+      <div class="flex items-center gap-2">
+        <!-- телефон (sm+) -->
+        <a href="tel:+78452353137" class="hidden sm:block text-right leading-tight">
+          <span class="block font-mono text-[13.5px] font-medium tnum whitespace-nowrap">+7 (8452) 35-31-37</span>
+          <span class="hidden xl:block text-[11px] text-muted-foreground whitespace-nowrap">прайс и заявки&nbsp;· пн–пт 8:00–17:00</span>
         </a>
-        <a href="#rfq" class="hidden sm:inline-flex items-center justify-center h-11 px-5 rounded bg-btn text-white font-extrabold text-[14.5px] hover:bg-btndeep transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-paper">Запросить прайс</a>
-        <!-- переключатель темы: light (ДНК rmk.ru) ↔ dark -->
-        <button id="themeBtn" type="button" class="flex items-center justify-center w-11 h-11 shrink-0 rounded border border-line text-gray hover:border-blue hover:text-blue transition-colors duration-200 cursor-pointer" aria-label="Переключить тему" aria-pressed="false" title="Переключить тему">
-          <svg class="ti-sun hidden w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-          <svg class="ti-moon w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <!-- переключатель темы -->
+        <button id="theme-toggle" type="button" class="btn btn-ghost btn-icon" aria-label="Переключить тему" aria-pressed="false">
+          <svg class="icon-sun h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <svg class="icon-moon h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         </button>
-        <button id="menuBtn" class="lg:hidden flex flex-col justify-center items-center w-11 h-11 rounded border border-line hover:border-blue transition-colors duration-200 cursor-pointer" aria-expanded="false" aria-controls="mobileMenu" aria-label="Открыть меню">
-          <span class="icon-burger flex flex-col gap-[5px]" aria-hidden="true">
-            <span class="block w-6 h-[2.5px] rounded-full bg-ink"></span>
-            <span class="block w-6 h-[2.5px] rounded-full bg-ink"></span>
-            <span class="block w-6 h-[2.5px] rounded-full bg-ink"></span>
-          </span>
-          <span class="icon-x relative hidden w-6 h-6" aria-hidden="true">
-            <span class="absolute left-1/2 top-1/2 block w-6 h-[2.5px] rounded-full bg-ink -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
-            <span class="absolute left-1/2 top-1/2 block w-6 h-[2.5px] rounded-full bg-ink -translate-x-1/2 -translate-y-1/2 -rotate-45"></span>
-          </span>
+        <!-- CTA (lg+) -->
+        <a href="#rfq" class="btn btn-default hidden lg:inline-flex">Запросить прайс</a>
+        <!-- бургер (<lg) -->
+        <button id="menu-toggle" type="button" class="btn btn-ghost btn-icon lg:hidden" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+          <svg class="icon-burger h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <svg class="icon-x h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
     </div>
-  </div>
-  <!-- мобильное меню: рабочее, тап-зоны ≥44px; без cookie-баннера (джокер: «баннер 286px = 36% экрана накрывает телефон») -->
-  <div id="mobileMenu" class="lg:hidden hidden border-t border-line bg-paper2">
-    <nav class="px-4 py-2 flex flex-col" aria-label="Мобильное меню">
-      <a href="#spec" class="menu-link py-3 border-b border-line font-semibold min-h-[44px] flex items-center">Продукция завода</a>
-      <a href="#podbor" class="menu-link py-3 border-b border-line font-semibold min-h-[44px] flex items-center">Подбор по типу</a>
-      <a href="#rfq" class="menu-link py-3 border-b border-line font-semibold min-h-[44px] flex items-center">Запросить прайс</a>
-      <a href="#contacts" class="menu-link py-3 font-semibold min-h-[44px] flex items-center">Контакты</a>
-      <a href="tel:+78452353137" class="menu-link my-3 inline-flex items-center justify-center h-12 rounded border border-line font-mono font-bold text-[16px] min-h-[48px]" spellcheck="false">+7 (8452) 35-31-37</a>
-      <a href="#rfq" class="menu-link mb-3 inline-flex items-center justify-center h-12 rounded bg-btn text-white font-extrabold min-h-[48px]">Запросить прайс</a>
-    </nav>
+
+    <!-- мобильное меню -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t py-3">
+      <nav class="flex flex-col" aria-label="Мобильная навигация">
+        <a class="navlink" href="#produkciya">Продукция завода</a>
+        <a class="navlink" href="#podbor">Подбор по типу</a>
+        <a class="navlink" href="#rfq">Запросить прайс</a>
+        <a class="navlink" href="#contacts">Контакты</a>
+      </nav>
+      <div class="mt-3 flex flex-col gap-3 border-t pt-3">
+        <a href="tel:+78452353137" class="font-mono text-[15px] font-medium tnum">+7 (8452) 35-31-37</a>
+        <a href="#rfq" class="btn btn-default btn-block">Запросить прайс</a>
+      </div>
+    </div>
   </div>
 </header>
 
+<!-- scrim мобильного меню -->
+<div id="scrim" class="fixed inset-0 z-40 hidden bg-black/50 lg:hidden" aria-hidden="true"></div>
+
 <main id="main">
+  <!-- ===================== ГЕРОЙ (центрированный, shadcn-манера) ===================== -->
+  <section id="podbor" class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="pt-8 sm:pt-14 lg:pt-20 pb-8 sm:pb-14 lg:pb-16 text-center">
+      <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground">АО «СЗ РМК»&nbsp;· САРАТОВ&nbsp;· <span class="whitespace-nowrap">ЗАВОД ПОЛНОГО ЦИКЛА</span>&nbsp;· 70+ ЛЕТ</p>
+      <h1 class="mx-auto mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl sm:leading-[1.15]">Резервуары и металлоконструкции&nbsp;— напрямую с&nbsp;завода, по&nbsp;ГОСТ</h1>
+      <p class="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground sm:text-base">РВС 10–5000&nbsp;м³, РГС 3–200&nbsp;м³, изотермические резервуары, металлоконструкции по&nbsp;чертежам заказчика. Проект → производство → монтаж → антикоррозионная защита. Прайс и&nbsp;наличие&nbsp;— в&nbsp;течение рабочего дня.</p>
+      <div class="mt-6 flex flex-col items-center justify-center gap-2.5 sm:mt-8 sm:flex-row sm:gap-3">
+        <a href="#rfq" class="btn btn-default btn-lg btn-block sm:w-auto">Запросить прайс</a>
+        <a href="#produkciya" class="btn btn-outline btn-lg btn-block sm:w-auto">Смотреть продукцию</a>
+      </div>
 
-<!-- HERO: product-first — карточка реальной продукции завода на инженерном фоне.
-     Джокер «вес страницы 24,8 MB»: здесь 0 фото/видео — только типографика и CSS-сетка. -->
-<section class="blueprint bg-paper border-b border-line">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-16 pb-8 lg:pb-14">
-    <div class="grid lg:grid-cols-[1.08fr_0.92fr] gap-5 lg:gap-12 items-start">
-
-      <!-- левая колонка -->
-      <div class="min-w-0">
-        <p class="font-mono text-[11.5px] sm:text-[12.5px] font-semibold tracking-[0.14em] text-blue mb-2 lg:mb-3">АО «СЗ РМК»&nbsp;· САРАТОВ&nbsp;· <span class="whitespace-nowrap">ЗАВОД ПОЛНОГО ЦИКЛА</span>&nbsp;· 70+&nbsp;ЛЕТ</p>
-        <!-- Open Sans 800 шире Manrope: масштабы H1 пересчитаны под неразрывный run «металлоконструкции&nbsp;—»
-             (nbsp ПЕРЕД тире сохранён — фикс ревью №5: тире не начинает строку) -->
-        <h1 class="font-disp font-extrabold leading-[1.06] tracking-tight text-[27px] sm:text-[34px] lg:text-[38px] xl:text-[44px] balance text-ink">Резервуары и металлоконструкции&nbsp;— напрямую с&nbsp;завода, по&nbsp;ГОСТ</h1>
-        <p class="mt-2 lg:mt-5 text-[14.5px] sm:text-[17px] text-ink2 leading-relaxed max-w-[54ch]">РВС 10–5000 м³, РГС 3–200 м³, изотермические резервуары, металлоконструкции по чертежам заказчика. Проект → производство → монтаж → антикоррозионная защита. Прайс и наличие — в течение рабочего дня.</p>
-
-        <!-- строка-подбор: визуальная, не рабочая (ассортимент — реальный, по каталогу rmk.ru/services/) -->
-        <div id="podbor" class="mt-4 lg:mt-8 rounded border border-line bg-paper2 p-3 sm:p-4">
-          <label class="block font-mono text-[11px] font-semibold tracking-[0.14em] text-gray mb-1.5 lg:mb-2.5" id="podbor-label">ПОДБОР ПО ТИПУ</label>
-          <div role="group" aria-labelledby="podbor-label">
-            <div class="flex flex-wrap gap-2">
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-paper font-mono font-semibold text-[13.5px] whitespace-nowrap">РВС · вертикальные</span>
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-paper font-mono font-semibold text-[13.5px] whitespace-nowrap">РГС · горизонтальные</span>
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-paper font-mono font-semibold text-[13.5px] whitespace-nowrap">изотермические</span>
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-btn bg-btn text-white font-mono font-semibold text-[13.5px] whitespace-nowrap">по чертежам заказчика</span>
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-paper font-mono font-semibold text-[13.5px] whitespace-nowrap">настилы и ступени</span>
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-paper font-mono font-semibold text-[13.5px] whitespace-nowrap">затворы РУМ-2</span>
-              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-dashed border-line text-gray font-mono font-semibold text-[13.5px] whitespace-nowrap">…</span>
-            </div>
-          </div>
-          <p class="mt-2.5 hidden text-[12px] text-gray sm:block">Полный каталог — 7 товарных направлений; в демо показана выборка.</p>
+      <!-- панель подбора чипами -->
+      <div class="mt-7 sm:mt-10">
+        <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Подбор по типу</p>
+        <div class="mt-3 flex flex-wrap items-center justify-center gap-2" role="list" aria-label="Типы продукции">
+          <span class="badge badge-outline" role="listitem">РВС&nbsp;· вертикальные</span>
+          <span class="badge badge-outline" role="listitem">РГС&nbsp;· горизонтальные</span>
+          <span class="badge badge-outline" role="listitem">изотермические</span>
+          <span class="badge badge-outline" role="listitem">по чертежам заказчика</span>
+          <span class="badge badge-outline" role="listitem">настилы и ступени</span>
+          <span class="badge badge-outline" role="listitem">затворы РУМ-2</span>
+          <span class="badge badge-outline text-muted-foreground" role="listitem">…</span>
         </div>
+        <p class="mt-3 text-xs text-muted-foreground">Полный каталог&nbsp;— 7 товарных направлений; в&nbsp;демо показана выборка.</p>
+      </div>
+    </div>
+  </section>
 
-        <!-- CTA героя (джокер: «лидового CTA в первом экране нет — только слайдерное "Подробнее"») -->
-        <div class="mt-4 lg:mt-6 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
-          <a href="#rfq" class="inline-flex items-center justify-center h-11 min-h-[44px] lg:h-[52px] px-7 rounded bg-btn text-white font-extrabold text-[15px] sm:text-[16px] hover:bg-btndeep transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-paper">Запросить прайс</a>
-          <a href="#spec" class="inline-flex items-center justify-center h-11 min-h-[44px] lg:h-[52px] px-7 rounded border-2 border-line font-bold text-[15px] sm:text-[16px] hover:border-blue hover:text-blue transition-colors duration-200 cursor-pointer">Смотреть продукцию</a>
+  <!-- ===================== ПРОДУКЦИЯ ===================== -->
+  <section id="produkciya" class="border-t bg-muted/30">
+    <div class="mx-auto max-w-6xl px-4 pt-8 pb-10 sm:px-6 sm:py-14 lg:px-8">
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Продукция завода</p>
+        <span class="badge badge-secondary">ГОСТ 31385-2023</span>
+      </div>
+
+      <!-- карточка РВС-1000 -->
+      <div class="card mt-4 overflow-hidden">
+        <div class="p-5 sm:p-8">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <h3 class="max-w-xl text-lg font-semibold tracking-tight sm:text-xl">Резервуар вертикальный стальной РВС-1000</h3>
+            <span class="badge badge-secondary">ПОД ЗАКАЗ</span>
+          </div>
+          <dl class="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 sm:mt-7 lg:grid-cols-4">
+            <div>
+              <dt class="text-[13px] text-muted-foreground">Объём</dt>
+              <dd class="tnum mt-1 text-lg font-semibold">1000&nbsp;м³</dd>
+            </div>
+            <div>
+              <dt class="text-[13px] text-muted-foreground">Типоразмеры</dt>
+              <dd class="tnum mt-1 text-lg font-semibold">РВС 10–5000&nbsp;м³</dd>
+            </div>
+            <div>
+              <dt class="text-[13px] text-muted-foreground">Монтаж</dt>
+              <dd class="mt-1 text-lg font-semibold">силами завода</dd>
+            </div>
+            <div>
+              <dt class="text-[13px] uppercase tracking-wide text-muted-foreground">Цена</dt>
+              <dd class="mt-1 text-lg font-semibold text-primary">по запросу</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t bg-muted/40 px-5 py-4 sm:px-8">
+          <a href="#rfq" class="btn btn-default">Запросить прайс</a>
+          <p class="text-sm text-muted-foreground">прайс-лист&nbsp;— в&nbsp;течение рабочего дня</p>
         </div>
       </div>
 
-      <!-- карточка продукции: реальная позиция из каталога (цены в рублях на сайте нет — B2B, честно: «по запросу», прайс за рабочий день) -->
-      <aside id="spec" class="w-full max-w-[460px] mx-auto lg:mx-0 lg:justify-self-end min-w-0 scroll-mt-24">
-        <div class="card-lift card-shadow rounded border border-line bg-paper overflow-hidden">
-          <div class="bg-btn text-white px-4 py-2 flex items-center justify-between gap-3">
-            <span class="font-mono text-[11.5px] font-bold tracking-[0.12em]">ПРОДУКЦИЯ ЗАВОДА</span>
-            <span class="flex items-center gap-2 font-mono text-[11.5px] font-bold tracking-[0.08em]"><span class="w-2 h-2 rounded-full bg-white pulse" aria-hidden="true"></span>ГОСТ 31385-2023</span>
-          </div>
-          <div class="p-3.5 sm:p-5">
-            <div class="flex items-start justify-between gap-3">
-              <h2 class="font-disp font-extrabold text-[19px] sm:text-[22px] leading-snug min-w-0 text-ink">Резервуар вертикальный стальной РВС-1000</h2>
-              <span class="shrink-0 inline-flex items-center h-7 px-2.5 rounded bg-ambertint border border-amber/45 text-amber font-mono font-bold text-[11px] tracking-wide">ПОД ЗАКАЗ</span>
-            </div>
-            <dl class="mt-2.5 sm:mt-4 space-y-1.5 text-[13.5px]">
-              <div class="flex justify-between gap-4 border-b border-line pb-1.5">
-                <dt class="text-ink2">Объём</dt><dd class="font-mono font-semibold text-ink">1000 м³</dd>
-              </div>
-              <div class="flex justify-between gap-4 border-b border-line pb-1.5">
-                <dt class="text-ink2">Типоразмеры</dt><dd class="font-mono font-semibold text-right text-ink">РВС 10–5000 м³</dd>
-              </div>
-              <div class="flex justify-between gap-4 border-b border-line pb-1.5">
-                <dt class="text-ink2">Монтаж</dt><dd class="font-mono font-semibold text-right text-ink">силами завода</dd>
-              </div>
-            </dl>
-            <div class="mt-3 sm:mt-4 flex items-end justify-between gap-3">
-              <div>
-                <p class="font-mono text-[11px] tracking-[0.12em] text-gray">ЦЕНА</p>
-                <p class="font-disp font-extrabold text-[26px] sm:text-[30px] leading-none mt-1 text-ink">по запросу</p>
-                <p class="mt-1.5 text-[12px] text-gray">прайс-лист — в течение рабочего дня</p>
-              </div>
-              <a href="#rfq" class="inline-flex items-center justify-center h-11 min-h-[44px] px-5 rounded bg-btn text-white font-extrabold text-[14px] hover:bg-btndeep transition-colors duration-200 cursor-pointer whitespace-nowrap">Запросить прайс</a>
-            </div>
-
-            <!-- мини-выборка реальных позиций каталога -->
-            <p class="mt-4 sm:mt-5 mb-2 font-mono text-[11px] font-semibold tracking-[0.14em] text-gray">ЕЩЁ С ЗАВОДА · КАТАЛОГ RMK.RU</p>
-            <ul class="divide-y divide-line border border-line rounded overflow-hidden">
-              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-paper2">
-                <span class="text-[13px] font-semibold min-w-0 truncate text-ink">РГС 3–200 м³</span>
-                <span class="shrink-0 font-mono font-bold text-[12px] text-ink2">горизонтальные</span>
-              </li>
-              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-paper2">
-                <span class="text-[13px] font-semibold min-w-0 truncate text-ink"><span class="sm:hidden">Изотермические</span><span class="hidden sm:inline">Резервуары изотермические</span></span>
-                <span class="shrink-0 inline-flex items-center"><span class="inline-flex items-center h-6 px-2 rounded bg-oktint border border-ok/45 text-ok font-mono font-bold text-[10.5px] tracking-wide">ОТГРУЗКА 2026</span></span>
-              </li>
-              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-paper2">
-                <span class="text-[13px] font-semibold min-w-0 truncate text-ink">Металлоконструкции</span>
-                <span class="shrink-0 font-mono font-bold text-[12px] text-ink2">по чертежам</span>
-              </li>
-              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-paper2">
-                <span class="text-[13px] font-semibold min-w-0 truncate text-ink">Затворы РУМ-2 · настилы</span>
-                <span class="shrink-0 font-mono font-bold text-[12px] text-ink2">для РВС</span>
-              </li>
-            </ul>
-            <p class="mt-3 text-[12px] text-gray">7 товарных направлений&nbsp;· полный цикл: проект → завод → монтаж → АКЗ</p>
-          </div>
+      <!-- каталог: ещё с завода -->
+      <p class="mt-10 text-xs font-medium uppercase tracking-wider text-muted-foreground">Ещё с завода&nbsp;· каталог RMK.RU</p>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="card p-5 transition-colors hover:bg-accent/50">
+          <p class="tnum text-sm font-semibold">РГС 3–200&nbsp;м³</p>
+          <p class="mt-1 text-sm text-muted-foreground">горизонтальные</p>
         </div>
-      </aside>
-    </div>
-
-    <!-- trust-полоса: факты завода из анализа (новости/отгрузки 2026 подтверждены) -->
-    <div class="mt-8 lg:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-y-3 sm:gap-4 border border-line rounded bg-paper2 px-4 py-4">
-      <p class="flex items-center gap-2.5 text-[13.5px] sm:text-[14px] font-semibold text-ink">
-        <svg class="w-5 h-5 text-blue shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>70+ лет истории завода</p>
-      <p class="flex items-center gap-2.5 text-[13.5px] sm:text-[14px] font-semibold text-ink">
-        <svg class="w-5 h-5 text-blue shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"/><path d="M4 18V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12"/><path d="M10 10h4"/><path d="M12 8v4"/></svg>Полный цикл: проект → завод → монтаж → АКЗ</p>
-      <p class="flex items-center gap-2.5 text-[13.5px] sm:text-[14px] font-semibold text-ink">
-        <svg class="w-5 h-5 text-blue shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>Отгрузки 2026 — по РФ: Ленобласть, Амурская обл.</p>
-    </div>
-  </div>
-</section>
-
-<!-- RFQ: прайс и наличие — в течение рабочего дня (джокер: «CTA ведёт в слайдер, лидовой формы в первом экране нет») -->
-<section id="rfq" class="border-b border-line bg-paper2">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-    <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-start">
-      <div class="min-w-0">
-        <p class="font-mono text-[11.5px] sm:text-[12.5px] font-semibold tracking-[0.14em] text-blue mb-3">ПРАЙС · НАЛИЧИЕ · СРОКИ</p>
-        <h2 class="font-disp font-extrabold text-[24px] sm:text-[32px] leading-tight tracking-tight balance text-ink">Запросите прайс — ответим в&nbsp;течение рабочего дня</h2>
-        <ul class="mt-5 space-y-2.5 text-[14.5px] sm:text-[15px] text-ink font-semibold">
-          <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-blue shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Подберём типоразмер под задачу и площадку — РВС, РГС, изотермические</li>
-          <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-blue shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Пришлём прайс-лист, сроки производства и отгрузки по РФ</li>
-          <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-blue shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Металлоконструкции по чертежам заказчика, АКЗ и монтаж</li>
-        </ul>
-        <p class="mt-6 text-[13.5px] text-gray">Быстрее по телефону:
-          <a href="tel:+78452353137" class="font-mono font-bold text-ink hover:text-blue transition-colors duration-200 text-[15px] align-middle" spellcheck="false">+7 (8452) 35-31-37</a>
-        </p>
+        <div class="card p-5 transition-colors hover:bg-accent/50">
+          <p class="text-sm font-semibold">Изотермические</p>
+          <p class="mt-1 text-sm text-muted-foreground">Резервуары изотермические</p>
+          <span class="badge badge-outline mt-3">ОТГРУЗКА 2026</span>
+        </div>
+        <div class="card p-5 transition-colors hover:bg-accent/50">
+          <p class="text-sm font-semibold">Металлоконструкции</p>
+          <p class="mt-1 text-sm text-muted-foreground">по чертежам</p>
+        </div>
+        <div class="card p-5 transition-colors hover:bg-accent/50">
+          <p class="text-sm font-semibold">Затворы РУМ-2&nbsp;· настилы</p>
+          <p class="mt-1 text-sm text-muted-foreground">для РВС</p>
+        </div>
       </div>
 
-      <!-- форма: не отправляет данные + честная пометка (демо) -->
-      <form class="card-shadow rounded border border-line bg-paper p-5 sm:p-6" onsubmit="return false" aria-describedby="rfq-demo-note">
-        <h3 class="font-disp font-bold text-[19px] sm:text-[20px] text-ink">Запросить прайс</h3>
-        <p class="mt-1 text-[13px] text-gray">Ответим в рабочее время: цены, наличие, сроки.</p>
-        <div class="mt-4 space-y-3.5">
-          <div>
-            <label for="rmk-org" class="block text-[13px] font-bold mb-1.5 text-ink">Организация и имя</label>
-            <input id="rmk-org" name="org" type="text" autocomplete="organization" class="w-full h-12 min-h-[44px] px-4 rounded border border-line bg-inputbg text-[15px] text-ink focus:border-blue focus:outline-none transition-colors duration-200 placeholder:text-gray/80" placeholder="ООО «Нефтегаз», Сергей">
-          </div>
-          <div>
-            <label for="rmk-tel" class="block text-[13px] font-bold mb-1.5 text-ink">Телефон</label>
-            <input id="rmk-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" class="w-full h-12 min-h-[44px] px-4 rounded border border-line bg-inputbg text-[15px] text-ink focus:border-blue focus:outline-none transition-colors duration-200 placeholder:text-gray/80" placeholder="+7 (___) ___-__-__">
-          </div>
-          <div>
-            <label for="rmk-msg" class="block text-[13px] font-bold mb-1.5 text-ink">Что нужно</label>
-            <textarea id="rmk-msg" name="message" rows="2" class="w-full px-4 py-3 rounded border border-line bg-inputbg text-[15px] text-ink focus:border-blue focus:outline-none transition-colors duration-200 resize-none placeholder:text-gray/80" placeholder="Типоразмер, например: РВС-1000"></textarea>
-          </div>
-          <button type="submit" class="w-full h-12 min-h-[48px] rounded bg-btn text-white font-extrabold text-[15.5px] hover:bg-btndeep transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-paper">Запросить прайс</button>
-        </div>
-        <p id="rfq-demo-note" class="mt-3 text-[11.5px] text-gray leading-snug">Демо-макет: форма не отправляет данные. В рабочей версии заявка уходит на почту отдела продаж rulon@rmk.ru.</p>
-      </form>
+      <p class="mt-10 text-center text-sm text-muted-foreground">7 товарных направлений&nbsp;· полный цикл: проект → завод → монтаж → АКЗ</p>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- ===================== TRUST-ПОЛОСА ===================== -->
+  <section class="border-t" aria-label="Почему завод">
+    <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <ul class="grid gap-6 sm:grid-cols-3">
+        <li class="flex items-start gap-3">
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+          <p class="text-sm font-medium">70+ лет истории завода</p>
+        </li>
+        <li class="flex items-start gap-3">
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/></svg>
+          <p class="text-sm font-medium">Полный цикл: проект → завод → монтаж → АКЗ</p>
+        </li>
+        <li class="flex items-start gap-3">
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+          <p class="text-sm font-medium"><span class="tnum">Отгрузки 2026</span>&nbsp;— по&nbsp;РФ: Ленобласть, Амурская обл.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== RFQ ===================== -->
+  <section id="rfq" class="border-t">
+    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Прайс&nbsp;· наличие&nbsp;· сроки</p>
+          <h2 class="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">Запросите прайс&nbsp;— ответим в&nbsp;течение рабочего дня</h2>
+          <ul class="mt-6 space-y-3">
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <p class="text-sm leading-relaxed">Подберём типоразмер под задачу и&nbsp;площадку&nbsp;— РВС, РГС, изотермические</p>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <p class="text-sm leading-relaxed">Пришлём прайс-лист, сроки производства и&nbsp;отгрузки по&nbsp;РФ</p>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <p class="text-sm leading-relaxed">Металлоконструкции по&nbsp;чертежам заказчика, АКЗ и&nbsp;монтаж</p>
+            </li>
+          </ul>
+          <p class="mt-8 text-sm text-muted-foreground">Быстрее по телефону:</p>
+          <a href="tel:+78452353137" class="tnum mt-1 inline-block font-mono text-xl font-semibold tracking-tight">+7 (8452) 35-31-37</a>
+        </div>
+
+        <!-- форма (демо: не отправляет) -->
+        <div class="card p-5 sm:p-6">
+          <form onsubmit="return false" novalidate>
+            <div class="space-y-4">
+              <div class="space-y-2">
+                <label class="label" for="f-org">Организация и имя</label>
+                <input class="field" id="f-org" name="org" type="text" autocomplete="organization">
+              </div>
+              <div class="space-y-2">
+                <label class="label" for="f-phone">Телефон</label>
+                <input class="field tnum" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+              </div>
+              <div class="space-y-2">
+                <label class="label" for="f-msg">Что нужно</label>
+                <textarea class="field" id="f-msg" name="msg" rows="4"></textarea>
+              </div>
+              <button class="btn btn-default btn-lg btn-block" type="submit">Запросить прайс</button>
+              <p class="text-xs text-muted-foreground">Ответим в рабочее время: цены, наличие, сроки.</p>
+              <p class="text-xs text-muted-foreground">Демо-макет: форма не отправляет данные. В&nbsp;рабочей версии заявка уходит на&nbsp;почту отдела продаж <a class="underline underline-offset-2" href="mailto:rulon@rmk.ru">rulon@rmk.ru</a>.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
-<!-- ФУТЕР: маркировка демо + контакты (без ФИО руководства) -->
-<footer id="contacts" class="bg-paper">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div class="min-w-0">
-        <p class="font-disp font-extrabold text-[15px] text-ink">АО «СЗ РМК»&nbsp;· Саратов, пр. 50 лет Октября, 134/1</p>
-        <p class="mt-1 text-[13px] text-gray"><a href="mailto:rulon@rmk.ru" class="hover:text-blue transition-colors duration-200">rulon@rmk.ru</a>&nbsp;· <a href="tel:+78452353137" class="font-mono font-semibold hover:text-blue transition-colors duration-200" spellcheck="false">+7 (8452) 35-31-37</a></p>
-      </div>
-      <p class="text-[13px] text-gray sm:text-right">Резервуары РВС/РГС и металлоконструкции.<br>Полный цикл — от проекта до АКЗ.</p>
-    </div>
-    <div class="mt-6 pt-4 border-t border-line flex flex-wrap items-center justify-between gap-2">
-      <p class="font-mono text-[11px] text-gray tracking-wider">ДЕМО-МАКЕТ V1 · НЕ ПУБЛИКАЦИЯ</p>
-      <p class="text-[12px] text-gray">Макет для обсуждения редизайна · 09.10.2026</p>
+<!-- ===================== ФУТЕР ===================== -->
+<footer id="contacts" class="border-t bg-muted/30">
+  <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+    <p class="text-sm font-medium">АО «СЗ РМК»&nbsp;· Саратов, пр. 50 лет Октября, 134/1</p>
+    <p class="mt-1 text-sm text-muted-foreground"><a class="hover:text-foreground transition-colors" href="mailto:rulon@rmk.ru">rulon@rmk.ru</a>&nbsp;· <a class="tnum hover:text-foreground transition-colors" href="tel:+78452353137">+7 (8452) 35-31-37</a></p>
+    <p class="mt-4 max-w-md text-sm text-muted-foreground">Резервуары РВС/РГС и&nbsp;металлоконструкции. Полный цикл&nbsp;— от&nbsp;проекта до&nbsp;АКЗ.</p>
+    <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 border-t pt-6">
+      <span class="badge badge-outline">ДЕМО-МАКЕТ V1&nbsp;· НЕ ПУБЛИКАЦИЯ</span>
+      <span class="text-xs text-muted-foreground">Макет для обсуждения редизайна&nbsp;· <span class="tnum">09.10.2026</span></span>
     </div>
   </div>
 </footer>
 
 <script>
-(function(){
-  var btn=document.getElementById('menuBtn'),menu=document.getElementById('mobileMenu'),scrim=document.getElementById('menuScrim');
-  function setOpen(open){
-    menu.classList.toggle('hidden',!open);
-    scrim.classList.toggle('hidden',!open);
-    btn.setAttribute('aria-expanded',open?'true':'false');
-    btn.setAttribute('aria-label',open?'Закрыть меню':'Открыть меню');
-    document.body.style.overflow=open?'hidden':'';
+(function () {
+  /* --- тема: toggle + aria-pressed + localStorage + meta theme-color --- */
+  var root = document.documentElement;
+  var tbtn = document.getElementById('theme-toggle');
+  var meta = document.querySelector('meta[name="theme-color"]');
+  function applyTheme(dark) {
+    root.classList.toggle('dark', dark);
+    tbtn.setAttribute('aria-pressed', String(dark));
+    tbtn.setAttribute('aria-label', dark ? 'Переключить на светлую тему' : 'Переключить на тёмную тему');
+    if (meta) meta.setAttribute('content', dark ? '#09090b' : '#ffffff');
+    try { localStorage.setItem('szrmk-theme', dark ? 'dark' : 'light'); } catch (e) {}
   }
-  btn.addEventListener('click',function(){setOpen(menu.classList.contains('hidden'));});
-  scrim.addEventListener('click',function(){setOpen(false);});
-  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setOpen(false);});});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
-  window.matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches)setOpen(false);});
-})();
-
-/* переключатель темы: .dark на <html>, localStorage «szrmk-theme», aria-pressed, иконка sun/moon, meta theme-color */
-(function(){
-  var btn=document.getElementById('themeBtn');
-  if(!btn)return;
-  var KEY='szrmk-theme',sun=btn.querySelector('.ti-sun'),moon=btn.querySelector('.ti-moon');
-  function sync(){
-    var dark=document.documentElement.classList.contains('dark');
-    btn.setAttribute('aria-pressed',dark?'true':'false');
-    sun.classList.toggle('hidden',!dark);  /* тёмная → солнце (вернуть светлую) */
-    moon.classList.toggle('hidden',dark);  /* светлая → луна (уйти в тёмную) */
-    var m=document.querySelector('meta[name="theme-color"]');
-    if(m)m.setAttribute('content',dark?'#101418':'#ffffff');
-  }
-  btn.addEventListener('click',function(){
-    var dark=document.documentElement.classList.toggle('dark');
-    try{localStorage.setItem(KEY,dark?'dark':'light');}catch(e){}
-    sync();
+  applyTheme(root.classList.contains('dark'));
+  tbtn.addEventListener('click', function () {
+    applyTheme(!root.classList.contains('dark'));
   });
-  sync();
+
+  /* --- мобильное меню: бургер → крестик, scrim, Escape --- */
+  var burger = document.getElementById('menu-toggle');
+  var panel = document.getElementById('mobile-menu');
+  var scrim = document.getElementById('scrim');
+  function setMenu(open) {
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    panel.classList.toggle('hidden', !open);
+    scrim.classList.toggle('hidden', !open);
+  }
+  burger.addEventListener('click', function () {
+    setMenu(burger.getAttribute('aria-expanded') !== 'true');
+  });
+  scrim.addEventListener('click', function () { setMenu(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setMenu(false);
+  });
+  panel.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { setMenu(false); });
+  });
 })();
 </script>
 </body>

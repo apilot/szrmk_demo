@@ -43,9 +43,8 @@
   .hub-header h1{font-size:clamp(22px,3.4vw,32px);font-weight:800;letter-spacing:-.01em;line-height:1.2}
   .hub-header .sub{margin-top:10px;font-size:14px;font-weight:500;color:var(--muted)}
 
-  /* Grid: 1 колонка на мобильных (390) → 2 колонки на десктопе */
-  .grid{display:grid;grid-template-columns:1fr;gap:24px}
-  @media (min-width:768px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  /* Grid: одна карточка — центрированная колонка с max-width, без растягивания */
+  .grid{display:grid;grid-template-columns:1fr;gap:24px;max-width:640px;margin:0 auto}
 
   /* Card */
   .variant-card{
@@ -121,37 +120,22 @@
 
   <main class="grid" id="variants-grid">
 
-    <!-- 1. LIGHT — светлый фирменный (рекомендация) -->
+    <!-- Единственный вариант: v1_hero_light — редизайн v2 на shadcn/ui -->
     <article class="variant-card">
       <div class="card-head">
-        <span class="variant-name">Светлый фирменный</span>
-        <span class="badge">★ Рекомендация</span>
+        <span class="variant-name">Редизайн v2 — shadcn/ui</span>
+        <span class="badge">2 темы</span>
       </div>
-      <p class="variant-desc">палитра rmk.ru: белый / #F4F6F8, синий #0B6BB3, Open Sans, радиус 4px — сигнал «ваш сайт, только грамотнее»; 2 темы, переключатель в шапке</p>
+      <p class="variant-desc">канонический shadcn (zinc + фирменный синий #0b6bb3, Inter, flat-elegant), светлая и тёмная темы, переключатель в шапке страницы</p>
       <div class="swatches">
-        <span class="swatch"><i style="background:#FFFFFF"></i><span>#FFFFFF</span></span>
-        <span class="swatch"><i style="background:#F4F6F8"></i><span>#F4F6F8</span></span>
         <span class="swatch"><i style="background:#0B6BB3"></i><span>#0B6BB3</span></span>
-        <span class="swatch"><i style="background:#085A9C"></i><span>#085A9C</span></span>
+        <span class="swatch"><i style="background:#FFFFFF"></i><span>#FFFFFF</span></span>
+        <span class="swatch"><i style="background:#09090B"></i><span>#09090B</span></span>
+        <span class="swatch"><i style="background:#F4F4F5"></i><span>#F4F4F5</span></span>
       </div>
       <div class="links">
         <a class="btn btn-primary" href="v1_hero_light.html">Первый экран →</a>
-      </div>
-    </article>
-
-    <!-- 2. DARK — тёмный индустриальный (legacy) -->
-    <article class="variant-card">
-      <div class="card-head">
-        <span class="variant-name">Тёмный индустриальный <span style="font-weight:600;color:var(--muted)">(legacy)</span></span>
-      </div>
-      <p class="variant-desc">первая версия до редизайна в ключе сайта · Manrope + JetBrains Mono, акцент оранжевый</p>
-      <div class="swatches">
-        <span class="swatch"><i style="background:#101418"></i><span>#101418</span></span>
-        <span class="swatch"><i style="background:#1F2630"></i><span>#1F2630</span></span>
-        <span class="swatch"><i style="background:#FF7A1A"></i><span>#FF7A1A</span></span>
-      </div>
-      <div class="links">
-        <a class="btn btn-primary" href="v1_hero.html">Первый экран →</a>
+        <a class="btn btn-outline" href="v1_hero_light.html#dark">Открыть в тёмной →</a>
       </div>
     </article>
 
