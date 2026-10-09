@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Резервуары РВС, РГС и металлоконструкции от завода — АО «СЗ РМК», Саратов · демо-макет</title>
+<meta name="description" content="Демо-макет первого экрана: резервуары РВС 10–5000 м³ и РГС 3–200 м³ по ГОСТ 31385-2023, изотермические резервуары, металлоконструкции по чертежам. Прайс и наличие — в течение рабочего дня.">
+<meta name="theme-color" content="#101418">
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        night:   '#101418',
+        steel:   '#171D24',
+        steel2:  '#1F2630',
+        line:    '#2B3440',
+        frost:   '#E9EDF2',
+        mist:    '#C4CDDA',
+        orange:  '#FF7A1A',
+        orangedeep: '#E5660A',
+        ok:      '#43D17C',
+        okbright: '#7FE9AC',
+        amber:   '#FFC24B',
+      },
+      fontFamily: {
+        disp: ['Manrope', 'sans-serif'],
+        body: ['Manrope', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+    },
+  },
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { text-rendering: optimizeLegibility; }
+  section[id], aside[id], footer[id], div[id] { scroll-margin-top: 84px; }
+  /* инженерная сетка «чертёж» — вместо видео-фона 17,4 MB: 0 байт медиа */
+  .blueprint {
+    background-image:
+      linear-gradient(rgba(233,237,242,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(233,237,242,0.035) 1px, transparent 1px),
+      linear-gradient(rgba(233,237,242,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(233,237,242,0.06) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+  }
+  .pulse { animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  ::selection { background: #FF7A1A; color: #101418; }
+  .balance { text-wrap: balance; }
+  /* крестик вместо бургера в открытом меню — переключение по aria-expanded (ID-специфичность перебивает .hidden/.flex) */
+  #menuBtn[aria-expanded="true"] .icon-burger { display: none; }
+  #menuBtn[aria-expanded="true"] .icon-x { display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body class="bg-night text-frost font-body antialiased">
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-orange focus:text-night focus:px-4 focus:py-2 focus:rounded font-semibold">К содержанию</a>
+
+<!-- затемнение под открытым мобильным меню: контент не читается насквозь, клик закрывает -->
+<div id="menuScrim" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" aria-hidden="true"></div>
+
+<!-- ШАПКА: телефон КРУПНО в первом экране (джокер: «десктоп — ни одного видимого телефона в первом экране»)
+     Формат СТРОГО валидный: +7 (8452) 35-31-37 → tel:+78452353137 (11 цифр).
+     Джокер «битый tel гендира»: у них tel:+7452633377 = «+7 (452) 63-33-77», код 8452 обрезан — набор уходит в никуда. -->
+<header class="sticky top-0 z-50 bg-night/95 backdrop-blur border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-[52px] lg:h-[72px] gap-3 lg:gap-6">
+      <!-- логотип (текстовый, без бинарных ассетов) -->
+      <a href="#main" class="flex items-center gap-2.5 shrink-0 min-w-0" aria-label="СЗ РМК — на главную">
+        <span class="flex items-center justify-center w-9 h-9 rounded bg-orange text-night font-mono font-bold text-[14px] shrink-0" aria-hidden="true">РМК</span>
+        <span class="min-w-0">
+          <span class="block font-disp font-extrabold tracking-tight text-[16px] lg:text-[17px] leading-none">СЗ&nbsp;РМК</span>
+          <span class="hidden sm:block mt-0.5 text-[11px] text-mist leading-none">резервуары и металлоконструкции</span>
+        </span>
+      </a>
+      <!-- десктоп-навигация -->
+      <nav class="hidden lg:flex items-center gap-7 text-[14.5px] font-semibold" aria-label="Основное меню">
+        <a href="#spec" class="hover:text-orange transition-colors">Продукция</a>
+        <a href="#podbor" class="hover:text-orange transition-colors">Подбор</a>
+        <a href="#rfq" class="hover:text-orange transition-colors">Прайс</a>
+        <a href="#contacts" class="hover:text-orange transition-colors">Контакты</a>
+      </nav>
+      <!-- телефон крупно + CTA -->
+      <div class="flex items-center gap-3 lg:gap-5">
+        <a href="tel:+78452353137" class="text-right leading-none group" spellcheck="false">
+          <span class="block font-mono font-bold text-[15px] sm:text-[17px] lg:text-[20px] tracking-tight group-hover:text-orange transition-colors">+7 (8452) 35-31-37</span>
+          <span class="hidden lg:block mt-1 text-[11px] text-mist">прайс и заявки · пн–пт 8:00–17:00</span>
+        </a>
+        <a href="#rfq" class="hidden sm:inline-flex items-center justify-center h-11 px-5 rounded bg-orange text-night font-extrabold text-[14.5px] hover:bg-orangedeep transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 focus-visible:ring-offset-night">Запросить прайс</a>
+        <button id="menuBtn" class="lg:hidden flex flex-col justify-center items-center w-11 h-11 rounded border border-line hover:border-orange transition-colors cursor-pointer" aria-expanded="false" aria-controls="mobileMenu" aria-label="Открыть меню">
+          <span class="icon-burger flex flex-col gap-[5px]" aria-hidden="true">
+            <span class="block w-6 h-[2.5px] rounded-full bg-frost"></span>
+            <span class="block w-6 h-[2.5px] rounded-full bg-frost"></span>
+            <span class="block w-6 h-[2.5px] rounded-full bg-frost"></span>
+          </span>
+          <span class="icon-x relative hidden w-6 h-6" aria-hidden="true">
+            <span class="absolute left-1/2 top-1/2 block w-6 h-[2.5px] rounded-full bg-frost -translate-x-1/2 -translate-y-1/2 rotate-45"></span>
+            <span class="absolute left-1/2 top-1/2 block w-6 h-[2.5px] rounded-full bg-frost -translate-x-1/2 -translate-y-1/2 -rotate-45"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- мобильное меню: рабочее, тап-зоны ≥44px; без cookie-баннера (джокер: «баннер 286px = 36% экрана накрывает телефон») -->
+  <div id="mobileMenu" class="lg:hidden hidden border-t border-line bg-steel">
+    <nav class="px-4 py-2 flex flex-col" aria-label="Мобильное меню">
+      <a href="#spec" class="menu-link py-3 border-b border-line font-semibold min-h-[44px] flex items-center">Продукция завода</a>
+      <a href="#podbor" class="menu-link py-3 border-b border-line font-semibold min-h-[44px] flex items-center">Подбор по типу</a>
+      <a href="#rfq" class="menu-link py-3 border-b border-line font-semibold min-h-[44px] flex items-center">Запросить прайс</a>
+      <a href="#contacts" class="menu-link py-3 font-semibold min-h-[44px] flex items-center">Контакты</a>
+      <a href="tel:+78452353137" class="menu-link my-3 inline-flex items-center justify-center h-12 rounded border border-line font-mono font-bold text-[16px] min-h-[48px]" spellcheck="false">+7 (8452) 35-31-37</a>
+      <a href="#rfq" class="menu-link mb-3 inline-flex items-center justify-center h-12 rounded bg-orange text-night font-extrabold min-h-[48px]">Запросить прайс</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO: product-first — карточка реальной продукции завода на инженерном фоне.
+     Джокер «вес страницы 24,8 MB»: здесь 0 фото/видео — только типографика и CSS-сетка. -->
+<section class="blueprint border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-14 pb-8 lg:pb-12">
+    <div class="grid lg:grid-cols-[1.08fr_0.92fr] gap-5 lg:gap-12 items-start">
+
+      <!-- левая колонка -->
+      <div class="min-w-0">
+        <p class="font-mono text-[11.5px] sm:text-[12.5px] font-semibold tracking-[0.14em] text-orange mb-2 lg:mb-3">АО «СЗ РМК»&nbsp;· САРАТОВ&nbsp;· <span class="whitespace-nowrap">ЗАВОД ПОЛНОГО ЦИКЛА</span>&nbsp;· 70+&nbsp;ЛЕТ</p>
+        <h1 class="font-disp font-extrabold leading-[1.06] tracking-tight text-[28px] sm:text-[40px] lg:text-[48px] xl:text-[54px] balance">Резервуары и&nbsp;металлоконструкции&nbsp;— напрямую с&nbsp;завода, по&nbsp;ГОСТ</h1>
+        <p class="mt-2 lg:mt-5 text-[14.5px] sm:text-[17px] text-mist leading-relaxed max-w-[54ch]">РВС 10–5000 м³, РГС 3–200 м³, изотермические резервуары, металлоконструкции по чертежам заказчика. Проект → производство → монтаж → антикоррозионная защита. Прайс и наличие — в течение рабочего дня.</p>
+
+        <!-- строка-подбор: визуальная, не рабочая (ассортимент — реальный, по каталогу rmk.ru/services/) -->
+        <div id="podbor" class="mt-4 lg:mt-8 rounded border border-line bg-steel/70 p-3 sm:p-4">
+          <label class="block font-mono text-[11px] font-semibold tracking-[0.14em] text-mist mb-1.5 lg:mb-2.5" id="podbor-label">ПОДБОР ПО ТИПУ</label>
+          <div role="group" aria-labelledby="podbor-label">
+            <div class="flex flex-wrap gap-2">
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-steel2 font-mono font-semibold text-[13.5px] whitespace-nowrap">РВС · вертикальные</span>
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-steel2 font-mono font-semibold text-[13.5px] whitespace-nowrap">РГС · горизонтальные</span>
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-steel2 font-mono font-semibold text-[13.5px] whitespace-nowrap">изотермические</span>
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-orange/50 bg-steel2 text-orange font-mono font-semibold text-[13.5px] whitespace-nowrap">по чертежам заказчика</span>
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-steel2 font-mono font-semibold text-[13.5px] whitespace-nowrap">настилы и ступени</span>
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-line bg-steel2 font-mono font-semibold text-[13.5px] whitespace-nowrap">затворы РУМ-2</span>
+              <span class="inline-flex items-center h-9 lg:h-10 px-4 rounded border border-dashed border-line text-mist font-mono font-semibold text-[13.5px] whitespace-nowrap">…</span>
+            </div>
+          </div>
+          <p class="mt-2.5 hidden text-[12px] text-mist/80 sm:block">Полный каталог — 7 товарных направлений; в демо показана выборка.</p>
+        </div>
+
+        <!-- CTA героя (джокер: «лидового CTA в первом экране нет — только слайдерное "Подробнее"») -->
+        <div class="mt-4 lg:mt-6 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+          <a href="#rfq" class="inline-flex items-center justify-center h-11 min-h-[44px] lg:h-[52px] px-7 rounded bg-orange text-night font-extrabold text-[15px] sm:text-[16px] hover:bg-orangedeep transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 focus-visible:ring-offset-night">Запросить прайс</a>
+          <a href="#spec" class="inline-flex items-center justify-center h-11 min-h-[44px] lg:h-[52px] px-7 rounded border-2 border-line font-bold text-[15px] sm:text-[16px] hover:border-orange hover:text-orange transition-colors cursor-pointer">Смотреть продукцию</a>
+        </div>
+      </div>
+
+      <!-- карточка продукции: реальная позиция из каталога (цены в рублях на сайте нет — B2B, честно: «по запросу», прайс за рабочий день) -->
+      <aside id="spec" class="w-full max-w-[460px] mx-auto lg:mx-0 lg:justify-self-end min-w-0 scroll-mt-24">
+        <div class="rounded-lg border border-line bg-steel shadow-[0_8px_30px_rgba(0,0,0,0.45)] overflow-hidden">
+          <div class="bg-orange text-night px-4 py-2 flex items-center justify-between gap-3">
+            <span class="font-mono text-[11.5px] font-bold tracking-[0.12em]">ПРОДУКЦИЯ ЗАВОДА</span>
+            <span class="flex items-center gap-2 font-mono text-[11.5px] font-bold tracking-[0.08em]"><span class="w-2 h-2 rounded-full bg-night pulse" aria-hidden="true"></span>ГОСТ 31385-2023</span>
+          </div>
+          <div class="p-3.5 sm:p-5">
+            <div class="flex items-start justify-between gap-3">
+              <h2 class="font-disp font-extrabold text-[19px] sm:text-[22px] leading-snug min-w-0">Резервуар вертикальный стальной РВС-1000</h2>
+              <span class="shrink-0 inline-flex items-center h-7 px-2.5 rounded bg-amber/15 border border-amber/40 text-amber font-mono font-bold text-[11px] tracking-wide">ПОД ЗАКАЗ</span>
+            </div>
+            <dl class="mt-2.5 sm:mt-4 space-y-1.5 text-[13.5px]">
+              <div class="flex justify-between gap-4 border-b border-line pb-1.5">
+                <dt class="text-mist">Объём</dt><dd class="font-mono font-semibold">1000 м³</dd>
+              </div>
+              <div class="flex justify-between gap-4 border-b border-line pb-1.5">
+                <dt class="text-mist">Типоразмеры</dt><dd class="font-mono font-semibold text-right">РВС 10–5000 м³</dd>
+              </div>
+              <div class="flex justify-between gap-4 border-b border-line pb-1.5">
+                <dt class="text-mist">Монтаж</dt><dd class="font-mono font-semibold text-right">силами завода</dd>
+              </div>
+            </dl>
+            <div class="mt-3 sm:mt-4 flex items-end justify-between gap-3">
+              <div>
+                <p class="font-mono text-[11px] tracking-[0.12em] text-mist">ЦЕНА</p>
+                <p class="font-disp font-extrabold text-[26px] sm:text-[30px] leading-none mt-1">по запросу</p>
+                <p class="mt-1.5 text-[12px] text-mist">прайс-лист — в течение рабочего дня</p>
+              </div>
+              <a href="#rfq" class="inline-flex items-center justify-center h-11 min-h-[44px] px-5 rounded bg-orange text-night font-extrabold text-[14px] hover:bg-orangedeep transition-colors cursor-pointer whitespace-nowrap">Запросить прайс</a>
+            </div>
+
+            <!-- мини-выборка реальных позиций каталога -->
+            <p class="mt-4 sm:mt-5 mb-2 font-mono text-[11px] font-semibold tracking-[0.14em] text-mist">ЕЩЁ С ЗАВОДА · КАТАЛОГ RMK.RU</p>
+            <ul class="divide-y divide-line border border-line rounded overflow-hidden">
+              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-steel2/50">
+                <span class="text-[13px] font-semibold min-w-0 truncate">РГС 3–200 м³</span>
+                <span class="shrink-0 font-mono font-bold text-[12px] text-mist">горизонтальные</span>
+              </li>
+              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-steel2/50">
+                <span class="text-[13px] font-semibold min-w-0 truncate"><span class="sm:hidden">Изотермические</span><span class="hidden sm:inline">Резервуары изотермические</span></span>
+                <span class="shrink-0 inline-flex items-center"><span class="inline-flex items-center h-6 px-2 rounded bg-ok/15 border border-ok/50 text-okbright font-mono font-bold text-[10.5px] tracking-wide">ОТГРУЗКА 2026</span></span>
+              </li>
+              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-steel2/50">
+                <span class="text-[13px] font-semibold min-w-0 truncate">Металлоконструкции</span>
+                <span class="shrink-0 font-mono font-bold text-[12px] text-mist">по чертежам</span>
+              </li>
+              <li class="flex items-center justify-between gap-2 px-3 py-2.5 bg-steel2/50">
+                <span class="text-[13px] font-semibold min-w-0 truncate">Затворы РУМ-2 · настилы</span>
+                <span class="shrink-0 font-mono font-bold text-[12px] text-mist">для РВС</span>
+              </li>
+            </ul>
+            <p class="mt-3 text-[12px] text-mist">7 товарных направлений&nbsp;· полный цикл: проект → завод → монтаж → АКЗ</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- trust-полоса: факты завода из анализа (новости/отгрузки 2026 подтверждены) -->
+    <div class="mt-8 lg:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-y-2.5 sm:gap-4 border border-line rounded bg-steel/60 px-4 py-3.5">
+      <p class="flex items-center gap-2.5 text-[13.5px] sm:text-[14px] font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-orange shrink-0" aria-hidden="true"></span>70+ лет истории завода</p>
+      <p class="flex items-center gap-2.5 text-[13.5px] sm:text-[14px] font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-orange shrink-0" aria-hidden="true"></span>Полный цикл: проект → завод → монтаж → АКЗ</p>
+      <p class="flex items-center gap-2.5 text-[13.5px] sm:text-[14px] font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-orange shrink-0" aria-hidden="true"></span>Отгрузки 2026 — по РФ: Ленобласть, Амурская обл.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RFQ: прайс и наличие — в течение рабочего дня (джокер: «CTA ведёт в слайдер, лидовой формы в первом экране нет») -->
+<section id="rfq" class="border-b border-line bg-steel">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+    <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-start">
+      <div class="min-w-0">
+        <p class="font-mono text-[11.5px] sm:text-[12.5px] font-semibold tracking-[0.14em] text-orange mb-3">ПРАЙС · НАЛИЧИЕ · СРОКИ</p>
+        <h2 class="font-disp font-extrabold text-[24px] sm:text-[32px] leading-tight tracking-tight balance">Запросите прайс — ответим в&nbsp;течение рабочего дня</h2>
+        <ul class="mt-5 space-y-2.5 text-[14.5px] sm:text-[15px] text-frost/90 font-semibold">
+          <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-orange shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Подберём типоразмер под задачу и площадку — РВС, РГС, изотермические</li>
+          <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-orange shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Пришлём прайс-лист, сроки производства и отгрузки по РФ</li>
+          <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-orange shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Металлоконструкции по чертежам заказчика, АКЗ и монтаж</li>
+        </ul>
+        <p class="mt-6 text-[13.5px] text-mist">Быстрее по телефону:
+          <a href="tel:+78452353137" class="font-mono font-bold text-frost hover:text-orange transition-colors text-[15px] align-middle" spellcheck="false">+7 (8452) 35-31-37</a>
+        </p>
+      </div>
+
+      <!-- форма: не отправляет данные + честная пометка (демо) -->
+      <form class="rounded-lg border border-line bg-night p-5 sm:p-6" onsubmit="return false" aria-describedby="rfq-demo-note">
+        <h3 class="font-disp font-bold text-[19px] sm:text-[20px]">Запросить прайс</h3>
+        <p class="mt-1 text-[13px] text-mist">Ответим в рабочее время: цены, наличие, сроки.</p>
+        <div class="mt-4 space-y-3.5">
+          <div>
+            <label for="rmk-org" class="block text-[13px] font-bold mb-1.5">Организация и имя</label>
+            <input id="rmk-org" name="org" type="text" autocomplete="organization" class="w-full h-12 min-h-[44px] px-4 rounded border border-line bg-steel text-[15px] focus:border-orange focus:outline-none transition-colors placeholder:text-mist/70" placeholder="ООО «Нефтегаз», Сергей">
+          </div>
+          <div>
+            <label for="rmk-tel" class="block text-[13px] font-bold mb-1.5">Телефон</label>
+            <input id="rmk-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" spellcheck="false" class="w-full h-12 min-h-[44px] px-4 rounded border border-line bg-steel text-[15px] focus:border-orange focus:outline-none transition-colors placeholder:text-mist/70" placeholder="+7 (___) ___-__-__">
+          </div>
+          <div>
+            <label for="rmk-msg" class="block text-[13px] font-bold mb-1.5">Что нужно</label>
+            <textarea id="rmk-msg" name="message" rows="2" class="w-full px-4 py-3 rounded border border-line bg-steel text-[15px] focus:border-orange focus:outline-none transition-colors resize-none placeholder:text-mist/70" placeholder="Типоразмер, например: РВС-1000"></textarea>
+          </div>
+          <button type="submit" class="w-full h-12 min-h-[48px] rounded bg-orange text-night font-extrabold text-[15.5px] hover:bg-orangedeep transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 focus-visible:ring-offset-night">Запросить прайс</button>
+        </div>
+        <p id="rfq-demo-note" class="mt-3 text-[11.5px] text-mist/80 leading-snug">Демо-макет: форма не отправляет данные. В рабочей версии заявка уходит на почту отдела продаж rulon@rmk.ru.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ФУТЕР: маркировка демо + контакты (без ФИО руководства) -->
+<footer id="contacts" class="bg-night">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="min-w-0">
+        <p class="font-disp font-extrabold text-[15px]">АО «СЗ РМК»&nbsp;· Саратов, пр. 50 лет Октября, 134/1</p>
+        <p class="mt-1 text-[13px] text-mist"><a href="mailto:rulon@rmk.ru" class="hover:text-orange transition-colors">rulon@rmk.ru</a>&nbsp;· <a href="tel:+78452353137" class="font-mono font-semibold hover:text-orange transition-colors" spellcheck="false">+7 (8452) 35-31-37</a></p>
+      </div>
+      <p class="text-[13px] text-mist sm:text-right">Резервуары РВС/РГС и металлоконструкции.<br>Полный цикл — от проекта до АКЗ.</p>
+    </div>
+    <div class="mt-6 pt-4 border-t border-line flex flex-wrap items-center justify-between gap-2">
+      <p class="font-mono text-[11px] text-mist/85 tracking-wider">ДЕМО-МАКЕТ V1 · НЕ ПУБЛИКАЦИЯ</p>
+      <p class="text-[12px] text-mist/80">Макет для обсуждения редизайна · 08.10.2026</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'),menu=document.getElementById('mobileMenu'),scrim=document.getElementById('menuScrim');
+  function setOpen(open){
+    menu.classList.toggle('hidden',!open);
+    scrim.classList.toggle('hidden',!open);
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    btn.setAttribute('aria-label',open?'Закрыть меню':'Открыть меню');
+    document.body.style.overflow=open?'hidden':'';
+  }
+  btn.addEventListener('click',function(){setOpen(menu.classList.contains('hidden'));});
+  scrim.addEventListener('click',function(){setOpen(false);});
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setOpen(false);});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')setOpen(false);});
+  window.matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches)setOpen(false);});
+})();
+</script>
+</body>
+</html>
